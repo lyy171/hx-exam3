@@ -1,0 +1,118 @@
+clear
+
+
+
+validate_id() {
+
+    local id="$1"
+
+    if [[ "$id" =~ ^Z[0-9]{8}$ ]]; then
+
+        return 0
+
+    else
+
+        return 1
+
+    fi
+
+}
+
+
+
+validate_major() {
+
+    local major="$1"
+
+    if [[ "$major" =~ ^[a-zA-Z]+$ ]]; then
+
+        return 0
+
+    else
+
+        return 1
+
+    fi
+
+}
+
+
+
+while true; do
+
+    read -p "Please enter student ID (or 'quit' to exit): " student_id
+
+    if [ "$student_id" = "quit" ]; then
+
+        echo "Program exited."
+
+        exit 0
+
+    fi
+
+    if validate_id "$student_id"; then
+
+        break
+
+    else
+
+        echo "Invalid student ID format! Must be Z followed by 8 digits (e.g., Z23310421)"
+
+        echo "Examples of INVALID: 3721, 2020aaaa01B2, 13722225555, process"
+
+        echo "Examples of VALID:   Z23310401, Z23310211"
+
+    fi
+
+done
+
+
+
+while true; do
+
+    read -p "Please enter major name (English letters only, or 'quit' to exit): " major
+
+    if [ "$major" = "quit" ]; then
+
+        echo "Program exited."
+
+        exit 0
+
+    fi
+
+    if validate_major "$major"; then
+
+        break
+
+    else
+
+        echo "Invalid major! Must consist of English letters only."
+
+    fi
+
+done
+
+
+
+if id "$student_id" &>/dev/null; then
+
+    echo "User $student_id already exists."
+
+else
+
+    echo "User $student_id does not exist. Command to create:"
+
+    echo "  useradd -g $major $student_id"
+
+fi
+
+
+
+echo "Current time T3: $(date '+%Y-%m-%d %H:%M:%S')"
+
+
+
+read -n 1 -s -r -p "Press any key to exit..."
+
+echo
+

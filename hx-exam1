@@ -1,0 +1,61 @@
+#!/bin/bash
+
+cleanup() {
+
+    echo "Cleaning up..."
+
+    for f in coconut-*.MP3; do
+
+        [ -f "$f" ] && rm -f "$f" && echo "Removed $f"
+
+    done
+
+    exit
+
+}
+
+trap cleanup EXIT SIGINT SIGTERM
+
+if [ $# -ne 1 ]; then
+
+    echo "Error: need exactly one positive integer"
+
+    read -n 1 -s -r -p "Press any key..."
+
+    echo; exit 1
+
+fi
+
+if ! [[ "$1" =~ ^[1-9][0-9]*$ ]]; then
+
+    echo "Error: must be positive integer"
+
+    read -n 1 -s -r -p "Press any key..."
+
+    echo; exit 1
+
+fi
+
+n=$1
+
+echo "Huxuan will create $n files"
+
+cd ~/hxgit || exit 1
+
+for i in $(seq 1 "$n"); do
+
+    f="coconut-$i.MP3"
+
+    if [ -f "$f" ]; then echo "$f exists, skip"
+
+    else touch "$f"; echo "Created $f"; fi
+
+done
+
+echo "Huxuan fin"
+
+ls coconut-*.MP3 2>/dev/null
+
+echo "T2: $(date +%Y-%m-%d\ %H:%M:%S)"
+
+read -n 1 -s -r -p "Press any key..."; echo
